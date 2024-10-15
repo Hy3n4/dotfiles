@@ -1,0 +1,24 @@
+# Changing window focus
+
+# restart yabai service
+ctrl + alt + cmd - r : yabai --restart-service
+
+# change window focus within the space
+alt - j : yabai -m window --focus south
+alt - k : yabai -m window --focus north
+alt - h : yabai -m window --focus west
+alt - l : yabai -m window --focus east
+
+# change focus between external displays
+alt - s : yabai -m display --focus west
+alt - g : yabai -m display --focus east
+
+# toggle horizontal split - hopefuly
+shift + alt - s : yabai -m display --toggle split
+
+# Modifying Window Size
+#
+# maximize a window
+shift + alt - m : yabai -m window --toggle zoom-fullscreen
+
+shift + alt - e : yabai -m space --balance

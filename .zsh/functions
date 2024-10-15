@@ -1,0 +1,30 @@
+#
+# ZSH functions to start/stop OpenConnect VPN client
+# 
+# In my setup the VPN username is the same as $USER
+#
+function vpn-down() {
+  sudo kill -2 `pgrep openconnect` 
+  sudo brew services restart dnsmasq && sudo killall mDNSResponder
+}
+
+function genpasswd() {
+  pwgen -Bs $1 1 | pbcopy | pbpaste
+  echo "Has been copied to clipboard"
+}
+
+function bytestohr() {
+  local SIZE=$1
+  local UNITS="B KiB MiB GiB TiB PiB"
+  for F in $UNITS; do
+    local UNIT=$F
+    test ${SIZE%.*} -lt 1024 && break;
+    SIZE=$(echo "$SIZE / 1024" | bc -l)
+  done
+
+  if [ "$UNIT" == "B" ]; then
+    printf "%4.0f    %s\n" $SIZE $UNIT
+  else
+    printf "%7.02f %s\n" $SIZE $UNIT
+  fi
+}

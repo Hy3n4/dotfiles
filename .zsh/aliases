@@ -1,0 +1,40 @@
+alias zshconfig="nano ~/.zshrc"
+alias ohmyzsh="nano ~/.oh-my-zsh"
+alias ls='ls -GFh'
+alias ll='ls -lah'
+alias net_switch_work='networksetup -switchtolocation "Work"'
+alias net_switch_default='networksetup -switchtolocation "Automatic"'
+alias route_gmail='sudo route add smtp.gmail.com 192.168.1.1'
+alias portslisten='sudo lsof -iTCP -sTCP:LISTEN -P'
+alias rsync='rsync -vh --progress'
+alias sursync='rsync -vh --progress --rsync-path="sudo rsync"'
+alias kc='kubectl'
+alias vim='nvim'
+alias tsession='tmux new-session "tmux source-file ~/.tmux/default-session"'
+alias tf='terraform'
+alias tfp='terraform plan'
+alias tfa='terraform apply'
+alias tfiu='terraform init --upgrade'
+alias tg='terragrunt'
+alias tgp='terragrunt plan'
+alias tga='terragrunt apply'
+alias tgiu='terragrunt init --upgrade'
+alias tgiua='terragrunt init --upgrade && terragrunt apply'
+
+alias myip='curl -w "\n" https://ipinfo.io/ip'
+
+alias k9heudev='k9s --kubeconfig ~/.kube/config --context gke_heu-k8s-dev_europe-west3_collective'
+alias k9heupre='k9s --kubeconfig ~/.kube/config --context gke_heu-k8s-pre-prod_europe-west3_collective'
+alias k9heuprod='k9s --kubeconfig ~/.kube/config --context gke_heu-k8s-prod_europe-west3_collective'
+
+alias k9mafradev='k9s --kubeconfig ~/.kube/mafra-dso/config
+alias k9mafrapoc='k9s --kubeconfig ~/.kube/mafra-poc/config
+
+#alias k9isdev='k9s --kubeconfig ~/.kube/k8s-cdis' --context chadima2@k8s.dev.pha.cdis.cz
+#alias k9istest='k9s --kubeconfig ~/.kube/k8s-cdis' --context patrik-chadima@k8s.pha.test.cdis.cz
+#alias k9isprod='k9s --kubeconfig ~/.kube/k8s-cdis' --context patrik-chadima@k8s.pha.cdis.cz
+
+alias k9vps03='k9s --kubeconfig ~/.kube/k0s-vps03'
+alias k9oci='k9s --kubeconfig ~/.kube/vps01_config'
+alias k9nas='k9s --kubeconfig ~/.kube/k3s-homenas01'
+
