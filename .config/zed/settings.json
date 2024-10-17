@@ -38,7 +38,7 @@
     "copy_on_select": true
   },
   "cursor_blink": false,
-  // "relative_line_numbers": true,
+  "relative_line_numbers": false,
   "vertical_scroll_margin": 0,
   "toolbar": {
     "breadcrumbs": true,

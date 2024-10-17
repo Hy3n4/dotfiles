@@ -1,3 +1,4 @@
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -117,8 +118,8 @@ done
 source ~/.zsh/aliases
 source ~/.zsh/functions
 source ~/.zsh/completions
-source ~/.zsh/heu-envs
-source ~/.zsh/personal-envs
+#source ~/.zsh/heu-envs
+#source ~/.zsh/personal-envs
 source "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"
 PS1='$(kube_ps1)'$PS1
 
@@ -129,7 +130,6 @@ export LSCOLORS=GxFxBxDxCxegedabagacad
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-
 
 # PyEnv configuration
 export PYENV_ROOT="$HOME/.pyenv"

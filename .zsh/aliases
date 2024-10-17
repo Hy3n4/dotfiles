@@ -5,7 +5,18 @@ alias ll='ls -lah'
 alias portslisten='sudo lsof -iTCP -sTCP:LISTEN -P'
 alias rsync='rsync -vh --progress'
 alias sursync='rsync -vh --progress --rsync-path="sudo rsync"'
+
+# Kubernetes related stuff
 alias kc='kubectl'
+alias kx='kubectx'
+
+# k9s related stuff
+alias k9mafradev='k9s --kubeconfig ~/.kube/mafra-dso/config
+alias k9mafrapoc='k9s --kubeconfig ~/.kube/mafra-poc/config
+alias k9vps03='k9s --kubeconfig ~/.kube/k0s-vps03'
+alias k9oci='k9s --kubeconfig ~/.kube/vps01_config'
+alias k9nas='k9s --kubeconfig ~/.kube/k3s-homenas01'
+####
 alias vim='nvim'
 alias tsession='tmux new-session "tmux source-file ~/.tmux/default-session"'
 alias tf='terraform'
@@ -20,10 +31,4 @@ alias tgiua='terragrunt init --upgrade && terragrunt apply'
 
 alias myip='curl -w "\n" https://ipinfo.io/ip'
 
-alias k9mafradev='k9s --kubeconfig ~/.kube/mafra-dso/config
-alias k9mafrapoc='k9s --kubeconfig ~/.kube/mafra-poc/config
-
-alias k9vps03='k9s --kubeconfig ~/.kube/k0s-vps03'
-alias k9oci='k9s --kubeconfig ~/.kube/vps01_config'
-alias k9nas='k9s --kubeconfig ~/.kube/k3s-homenas01'
 

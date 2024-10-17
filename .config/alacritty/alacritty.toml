@@ -27,7 +27,7 @@ padding = { x = 5, y = 5 }
 #y = 0
 
 [shell]
-program = "zsh"
+program = "/opt/homebrew/bin/zellij"
 
 [font]
 size = 12.0

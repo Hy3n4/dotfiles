@@ -99,8 +99,8 @@ yabai -m rule --add app="^zoom.us$" space=8
 yabai -m rule --add app="^Microsoft Teams$" space=8
 
 #Alacritty specifics
-yabai -m rule --add app="^Alacritty$" manage=off
-yabai -m rule --add app="^Alacritty$" title="^tmux new-session \"tmux source-file ~/.tmux/default-session\"$" manage=on
+#yabai -m rule --add app="^Alacritty$" manage=off
+#yabai -m rule --add app="^Alacritty$" title="^tmux new-session \"tmux source-file ~/.tmux/default-session\"$" manage=on
 yabai -m rule --add app="^Alacritty$" space=^5
 
 #iTerm specifics
