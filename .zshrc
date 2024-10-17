@@ -151,7 +151,9 @@ done
 source ~/.zsh/aliases
 source ~/.zsh/functions
 source ~/.zsh/completions
-
+if [[ -f ~/.zsh/envs/personal ]]; then
+  source ~/.zsh/envs/personal
+fi
 # ===========================
 # Zsh Completions Configuration
 # ===========================
@@ -209,3 +211,5 @@ fi
 # ===========================
 # End of Configuration
 # ===========================
+
+[[ -e "/Users/patrikchadima/lib/oci_autocomplete.sh" ]] && source "/Users/patrikchadima/lib/oci_autocomplete.sh"
