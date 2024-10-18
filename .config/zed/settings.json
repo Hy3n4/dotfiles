@@ -94,6 +94,19 @@
           "prefillRequiredFields": true
         }
       }
+    },
+    "yaml-language-server": {
+      "settings": {
+        "yaml": {
+          "completion": true,
+          "schemaStore": {
+            "enable": true
+          },
+          "schemas": {
+            "kubernetes": "**.yaml"
+          }
+        }
+      }
     }
   },
   "git": {
