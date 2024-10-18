@@ -26,9 +26,9 @@
   "vim_mode": false,
   "ui_font_size": 12,
   "buffer_font_size": 12,
-  "ui_font_family": "Source Code Pro for Powerline",
+  "ui_font_family": "MesloLGS Nerd Font Mono",
   "terminal": {
-    "font_family": "Source Code Pro for Powerline",
+    "font_family": "MesloLGS Nerd Font Mono",
     "font_size": 12,
     "line_height": "standard",
     "toolbar": {
