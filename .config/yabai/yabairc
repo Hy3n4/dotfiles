@@ -1,3 +1,6 @@
+#!/usr/bin/env sh
+
+
 #debug options
 yabai -m config debug_output on
 
@@ -39,9 +42,13 @@ setup_space 8 meet
 yabai -m config layout bsp
 
 yabai -m config window_placement second_child
-# yabai -m config window_topmost off
-yabai -m config window_opacity off
+yabai -m config window_topmost off
 yabai -m config window_shadow on
+yabai -m config active_window_opacity 1.0
+yabai -m config normal_window_opacity 0.90
+yabai -m config split_ratio 0.50
+yabai -m config auto_balance off
+# yabai -m config window_opacity off
 # yabai -m config window_border off
 
 yabai -m config split_type auto
@@ -58,13 +65,18 @@ yabai -m config window_gap 8
 # mouse support
 yabai -m config mouse_follows_focus off
 yabai -m config focus_follows_mouse off
+yabai -m config mouse_modifier alt
+yabai -m config mouse_action1 move
+yabai -m config mouse_action2 resize
 
 yabai -m rule --add app="^Cisco AnyConnect Secure Mobility Client$" manage=off
 yabai -m rule --add app="^Forcepoint NGFW VPN Client$" manage=off
 yabai -m rule --add app="^Bitwarden$" manage=off
 yabai -m rule --add app="^CleanMyMac X$" manage=off
 yabai -m rule --add app="^Time Machine$" manage=off sticky=on
-yabai -m rule --add app="^Finder" manage=off sticky=on
+yabai -m rule --add app="^Finder$" manage=off sticky=on
+yabai -m rule --add app="^System Settings$" manage=off sticky=on
+
 # Jetbrains specifics
 JB_Apps='^(CLion|PyCharm|IntelliJ IDEA|GoLand)$'
 yabai -m rule --add app="${JB_Apps}" manage=off
@@ -94,6 +106,7 @@ yabai -m rule --add app="^Alacritty$" space=^"terminal"
 
 yabai -m rule --add app="^Spotify$" space="misc"
 yabai -m rule --add app="^Music$" space="misc"
+yabai -m rule --add app="^Notes$" space=^"misc"
 
 yabai -m rule --add app="^Royal TSX$" space=^"ssh"
 
