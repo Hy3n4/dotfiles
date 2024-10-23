@@ -35,6 +35,7 @@ plugins=(
   kubectl
   macos
   pip
+  pyenv
   sudo
   symfony
   zsh-autosuggestions
@@ -96,6 +97,7 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
 
 # Go paths.
 export GOPATH="$HOME/go"
