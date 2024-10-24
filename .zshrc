@@ -153,9 +153,9 @@ done
 source ~/.zsh/aliases
 source ~/.zsh/functions
 source ~/.zsh/completions
-if [[ -f ~/.zsh/envs/personal ]]; then
-  source ~/.zsh/envs/personal
-fi
+for env_file in ~/.zsh/env/*; do
+	source $env_file
+done
 # ===========================
 # Zsh Completions Configuration
 # ===========================
