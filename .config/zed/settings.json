@@ -7,20 +7,13 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  // "base_keymap": "JetBrains",
-  // "assistant": {
-  //   "default_model": {
-  //     "provider": "openai",
-  //     "model": "gpt-4o"
-  //   },
-  //   "version": "2"
-  // },
   "assistant": {
     "default_model": {
       "provider": "zed.dev",
-      "model": "claude-3-5-sonnet-20240620"
+      "model": "claude-3-5-sonnet-latest"
     },
-    "version": "2"
+    "version": "2",
+    "enable_experimental_live_diffs": true
   },
   "theme": "One Dark",
   "vim_mode": false,
@@ -52,7 +45,8 @@
     "git_status": true
   },
   "features": {
-    "copilot": false
+    "copilot": false,
+    "inline_completion_provider": "supermaven"
   },
   "preferred_line_length": 90,
   "telemetry": {

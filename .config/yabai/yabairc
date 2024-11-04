@@ -76,6 +76,7 @@ yabai -m rule --add app="^CleanMyMac X$" manage=off
 yabai -m rule --add app="^Time Machine$" manage=off sticky=on
 yabai -m rule --add app="^Finder$" manage=off sticky=off
 yabai -m rule --add app="^System Settings$" manage=off sticky=off
+yabai -m rule --add app="^OBS Studio$" manage=off sticky=off
 
 # Jetbrains specifics
 JB_Apps='^(CLion|PyCharm|IntelliJ IDEA|GoLand)$'

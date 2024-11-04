@@ -32,6 +32,7 @@ plugins=(
   github
   history
   history-substring-search
+  kiwi
   kubectl
   macos
   pip
