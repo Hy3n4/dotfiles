@@ -9,7 +9,7 @@ layout {
         }
     }
     tab split_direction="Horizontal" {
-        pane command="/opt/homebrew/bin/k9s"
+        pane 
         pane split_direction="vertical" {
             pane size="50%"
             pane size="50%"

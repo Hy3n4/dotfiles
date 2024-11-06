@@ -9,6 +9,7 @@ alias sursync='rsync -vh --progress --rsync-path="sudo rsync"'
 # Kubernetes related stuff
 alias kc='kubectl'
 alias kx='kubectx'
+alias kn='kubens'
 
 # k9s related stuff
 alias k9mafradev='k9s --kubeconfig ~/.kube/mafra-dso/config
