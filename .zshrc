@@ -1,3 +1,12 @@
+# Homebrew paths.
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+# PyEnv configuration.
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
 # ==========================================
 # Instant Prompt Initialization (If Needed)
 # ==========================================
@@ -83,8 +92,6 @@ export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 # PATH Configuration
 # ===========================
 
-# Homebrew paths.
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
 # MySQL client path.
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
@@ -92,12 +99,6 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 # PHP paths.
 export PATH="/opt/homebrew/opt/php@7.4/bin:/opt/homebrew/opt/php@7.4/sbin:$PATH"
 
-# PyEnv configuration.
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 
 # Go paths.

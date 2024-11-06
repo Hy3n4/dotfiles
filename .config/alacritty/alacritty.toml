@@ -1,3 +1,7 @@
+live_config_reload = true
+import = [
+  "~/.config/alacritty/themes/one-dark.toml"
+]
 
 [env]
 TERM = "xterm-256color"
@@ -21,7 +25,7 @@ padding = { x = 5, y = 5 }
 #x = 0
 #y = 0
 
-[terminal.shell]
+[shell]
 program = "/opt/homebrew/bin/zellij"
 
 [font]
@@ -42,15 +46,6 @@ style = "Italic"
 [font.normal]
 family = "MesloLGS Nerd Font Mono"
 style = "Regular"
-
-[general]
-
-live_config_reload = true
-import = [
-  "~/.config/alacritty/themes/one-dark.toml"
-]
-
-[terminal]
 
 [[keyboard.bindings]]
 chars = "\u001Bb"
