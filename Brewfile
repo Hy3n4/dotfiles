@@ -120,7 +120,6 @@ brew "gnupg"
 brew "go"
 brew "go-bindata"
 brew "gobject-introspection"
-brew "gopls"
 brew "govc"
 brew "netpbm"
 brew "gts"
@@ -158,6 +157,7 @@ brew "librdkafka"
 brew "kcat"
 brew "kind"
 brew "kubernetes-cli"
+brew "krew"
 brew "kube-ps1"
 brew "kube-score"
 brew "kubebuilder"
@@ -302,6 +302,7 @@ cask "istat-menus"
 cask "iterm2"
 cask "itsycal"
 cask "joplin"
+cask "karabiner-elements"
 cask "lens"
 cask "macfuse"
 cask "microsoft-edge"
@@ -346,3 +347,4 @@ mas "Keynote", id: 409183694
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "WireGuard", id: 1451685025
+mas "Xcode", id: 497799835
