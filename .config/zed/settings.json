@@ -73,6 +73,7 @@
       "initialization_options": {
         "hints": {
           "assignVariableTypes": true,
+          "completeUnimported": true,
           "compositeLiteralFields": true,
           "compositeLiteralTypes": true,
           "constantValues": true,
