@@ -98,7 +98,7 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 # PHP paths.
 export PATH="/opt/homebrew/opt/php@7.4/bin:/opt/homebrew/opt/php@7.4/sbin:$PATH"
-
+export PATH="/usr/local/bin:$PATH"
 
 
 # Go paths.
