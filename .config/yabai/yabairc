@@ -78,6 +78,8 @@ yabai -m rule --add app="^Finder$" manage=off sticky=off
 yabai -m rule --add app="^System Settings$" manage=off sticky=off
 yabai -m rule --add app="^OBS Studio$" manage=off sticky=off
 yabai -m rule --add app="^DeepL$" manage=off sticky=off
+yabai -m rule --add app="^Screen Sharing$" manage=off sticky=off
+yabai -m rule --add app="^FaceTime$" manage=off sticky=off
 
 # Jetbrains specifics
 JB_Apps='^(CLion|PyCharm|IntelliJ IDEA|GoLand)$'
