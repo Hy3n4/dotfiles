@@ -217,3 +217,5 @@ fi
 # ===========================
 
 [[ -e "/Users/patrikchadima/lib/oci_autocomplete.sh" ]] && source "/Users/patrikchadima/lib/oci_autocomplete.sh"
+
+complete -o nospace -C /Users/patrikchadima/.tenv/Terraform/1.10.5/terraform terraform

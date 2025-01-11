@@ -24,5 +24,11 @@
     "bindings": {
       "cmd-shift-t": "workspace::NewTerminal"
     }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-shift-r": "editor::ReloadFile"
+    }
   }
 ]
