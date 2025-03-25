@@ -49,11 +49,11 @@ family = "MesloLGS Nerd Font Mono"
 style = "Regular"
 
 [[keyboard.bindings]]
-chars = "\u001Bb"
+chars = "\u001BB"
 key = "Left"
 mods = "Alt"
 
 [[keyboard.bindings]]
-chars = "\u001Bf"
+chars = "\u001BF"
 key = "Right"
 mods = "Alt"
