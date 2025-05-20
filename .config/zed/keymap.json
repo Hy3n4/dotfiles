@@ -9,6 +9,17 @@
   {
     "context": "Workspace",
     "bindings": {
+      "cmd-g cmd-s": [
+        "task::Spawn",
+        {
+          "task_name": "Gitlab: Show CI"
+        }
+      ]
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
       "shift shift": "file_finder::Toggle"
     }
   },
