@@ -23,6 +23,7 @@ fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+export ZSH_CUSTOM="$HOME/.oh-my-zsh-custom"
 
 # Set name of the theme to load.
 ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -41,7 +42,6 @@ plugins=(
   github
   history
   history-substring-search
-  kiwi
   kubectl
   macos
   pip
