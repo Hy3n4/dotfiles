@@ -32,7 +32,6 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(
   battery
   brew
-  buffalo
   composer
   docker
   docker-compose
@@ -117,8 +116,8 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
 # Source GCloud SDK scripts.
-source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
-source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc"
+#source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+#source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc"
 
 # ===========================
 # Kube-ps1 Prompt Configuration
