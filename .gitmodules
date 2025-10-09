@@ -10,3 +10,9 @@
 [submodule ".oh-my-zsh-custom/plugins/zsh-completions"]
 	path = .oh-my-zsh-custom/plugins/zsh-completions
 	url = https://github.com/zsh-users/zsh-completions.git
+[submodule "/Users/patrikchadima/.oh-my-zsh-custom/plugins/fzf-zsh-plugin"]
+	path = /Users/patrikchadima/.oh-my-zsh-custom/plugins/fzf-zsh-plugin
+	url = https://github.com/unixorn/fzf-zsh-plugin.git
+[submodule "/Users/patrikchadima/.config/nvim"]
+	path = /Users/patrikchadima/.config/nvim
+	url = https://github.com/Hy3n4/kickstart.nvim.git

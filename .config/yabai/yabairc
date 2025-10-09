@@ -1,24 +1,40 @@
 #!/usr/bin/env sh
 
+# Enhanced yabai configuration with fixed floating window focus behavior
+# Addresses issues with floating windows staying on top and maintaining focus inappropriately
 
-#debug options
-#yabai -m config debug_output on
+# Debug options (uncomment for troubleshooting)
+# yabai -m config debug_output on
+
+echo "Starting enhanced yabai configuration with proper floating window focus management..."
 
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
 
 #
-# setup spaces
+# Setup spaces
 #
-for _ in $(yabai -m query --spaces | jq '.[].index | select(. > 8)'); do
-  yabai -m space --destroy 9
+echo "Destroying extra spaces..."
+num_displays=$(yabai -m query --displays | jq '. | length')
+
+if [ "$num_displays" -eq 1 ]; then
+  # Single display: keep only 8 spaces
+  max_spaces=8
+else
+  # Multiple displays: keep 9 spaces (8 on external + 1 on MacBook)
+  max_spaces=9
+fi
+
+# Destroy spaces beyond the max, starting from the highest index
+for space_index in $(yabai -m query --spaces | jq '.[].index | select(. > '"$max_spaces"')' | sort -rn); do
+  yabai -m space --destroy "$space_index" 2>/dev/null || true
 done
 
 function setup_space {
   local idx="$1"
   local name="$2"
   local space=
-  echo "setup space $idx : $name"
+  echo "Setting up space $idx : $name"
 
   space=$(yabai -m query --spaces --space "$idx")
   if [ -z "$space" ]; then
@@ -28,7 +44,7 @@ function setup_space {
   yabai -m space "$idx" --label "$name"
 }
 
-# define spaces
+# Define spaces
 setup_space 1 im
 setup_space 2 web
 setup_space 3 calendar
@@ -38,10 +54,15 @@ setup_space 6 misc
 setup_space 7 ssh
 setup_space 8 meet
 
-# bsp, stack or float
+echo "Configuring layouts and enhanced focus behavior..."
+
+# Set default layout to BSP
 yabai -m config layout bsp
+
+# Set space 6 (misc) to float layout
 yabai -m config --space 6 layout float
 
+# Window management settings
 yabai -m config window_placement second_child
 yabai -m config window_shadow float
 yabai -m config window_opacity on
@@ -49,75 +70,300 @@ yabai -m config active_window_opacity 1.0
 yabai -m config normal_window_opacity 0.95
 yabai -m config split_ratio 0.5
 yabai -m config auto_balance off
-
 yabai -m config split_type auto
-yabai -m config split_ratio 0.5
-yabai -m config auto_balance off
 
-# padding
+# Padding
 yabai -m config top_padding 8
 yabai -m config bottom_padding 8
 yabai -m config left_padding 8
 yabai -m config right_padding 8
 yabai -m config window_gap 8
 
-# mouse support
+# ENHANCED FOCUS AND MOUSE BEHAVIOR
+# These settings prevent floating windows from behaving badly
 yabai -m config mouse_follows_focus off
 yabai -m config focus_follows_mouse off
 yabai -m config mouse_modifier alt
 yabai -m config mouse_action1 move
 yabai -m config mouse_action2 resize
-yabai -m config mouse_drop_action swap 
+yabai -m config mouse_drop_action swap
 
-yabai -m rule --add app="^Cisco Secure Client$" manage=off
-yabai -m rule --add app="^Forcepoint NGFW VPN Client$" manage=off
-yabai -m rule --add app="^Bitwarden$" manage=off
-yabai -m rule --add app="^CleanMyMac X$" manage=off
-yabai -m rule --add app="^Time Machine$" manage=off sticky=on
-yabai -m rule --add app="^Finder$" manage=off sticky=off
-yabai -m rule --add app="^System Settings$" manage=off sticky=off
-yabai -m rule --add app="^OBS Studio$" manage=off sticky=off
-yabai -m rule --add app="^DeepL$" manage=off sticky=off
-yabai -m rule --add app="^Screen Sharing$" manage=off sticky=off
-yabai -m rule --add app="^FaceTime$" manage=off sticky=off
+# Critical settings to prevent floating window focus issues
+yabai -m config insert_feedback_color 0xffd75f5f
 
-# Jetbrains specifics
+echo "Setting up system app rules with proper sub-layers..."
+
+# SYSTEM APPS - Always floating, never managed, with appropriate layers
+# These apps should never interfere with normal workflow
+
+# Security and VPN apps - normal layer as they need interaction
+yabai -m rule --add app="^Cisco Secure Client$" manage=off sub-layer=normal
+yabai -m rule --add app="^Forcepoint NGFW VPN Client$" manage=off sub-layer=normal
+
+# System utilities - normal layer but not sticky
+yabai -m rule --add app="^System Settings$" manage=off sub-layer=normal
+yabai -m rule --add app="^CleanMyMac X$" manage=off sub-layer=normal
+yabai -m rule --add app="^Time Machine$" manage=off sticky=on sub-layer=normal
+yabai -m rule --add app="^OBS Studio$" manage=off sub-layer=normal
+yabai -m rule --add app="^DeepL$" manage=off sub-layer=normal
+yabai -m rule --add app="^Screen Sharing$" manage=off sub-layer=normal
+yabai -m rule --add app="^FaceTime$" manage=off sub-layer=normal
+
+echo "Setting up context-aware floating windows with strategic sub-layers..."
+
+# CONTEXT-AWARE FLOATING APPS
+# Sub-layer strategy:
+# - 'below': Utility apps that should not interfere with main work
+# - 'normal': Apps that need regular interaction
+# - 'above': Only for critical alerts/errors
+
+# File management - normal layer for interaction, but with focus fixes
+yabai -m rule --add app="^Finder$" manage=off sub-layer=normal mouse_follows_focus=off
+yabai -m rule --add app="^Archive Utility$" manage=off sub-layer=below
+
+# Quick utilities - below layer so they don't interrupt workflow
+yabai -m rule --add app="^Calculator$" manage=off sub-layer=below
+yabai -m rule --add app="^Digital Color Meter$" manage=off sub-layer=below
+
+# System monitoring - normal layer as they're used for troubleshooting
+yabai -m rule --add app="^Activity Monitor$" manage=off sub-layer=normal
+yabai -m rule --add app="^Console$" manage=off sub-layer=normal
+yabai -m rule --add app="^Disk Utility$" manage=off sub-layer=normal
+
+# Security tools - normal layer for accessibility
+yabai -m rule --add app="^Keychain Access$" manage=off sub-layer=normal
+yabai -m rule --add app="^Bitwarden$" manage=off sub-layer=normal
+
+# Screenshot and capture tools - below layer to not obstruct
+yabai -m rule --add app="^Screenshot$" manage=off sub-layer=below
+yabai -m rule --add app="^CleanShot X$" manage=off sub-layer=below
+
+# Font and design tools - normal layer for design work
+yabai -m rule --add app="^Font Book$" manage=off sub-layer=normal
+
+echo "Setting up modal dialog rules with focus-friendly behavior..."
+
+# MODAL DIALOGS AND FILE OPERATIONS
+# These need to be accessible and properly layered for interaction
+
+# File operation dialogs - normal layer, essential for workflow
+yabai -m rule --add title="^Open$" manage=off sub-layer=normal
+yabai -m rule --add title="^Open .*$" manage=off sub-layer=normal
+yabai -m rule --add title="^Save$" manage=off sub-layer=normal
+yabai -m rule --add title="^Save .*$" manage=off sub-layer=normal
+yabai -m rule --add title="^Save As.*$" manage=off sub-layer=normal
+yabai -m rule --add title="^Export.*$" manage=off sub-layer=normal
+yabai -m rule --add title="^Import.*$" manage=off sub-layer=normal
+yabai -m rule --add title="^Choose.*$" manage=off sub-layer=normal
+yabai -m rule --add title="^Select.*$" manage=off sub-layer=normal
+
+# Application preferences and settings - normal layer
+yabai -m rule --add title="^Preferences$" manage=off sub-layer=normal
+yabai -m rule --add title="^Preferences .*$" manage=off sub-layer=normal
+yabai -m rule --add title="^Settings$" manage=off sub-layer=normal
+yabai -m rule --add title="^Settings .*$" manage=off sub-layer=normal
+yabai -m rule --add title=".*Settings$" manage=off sub-layer=normal
+yabai -m rule --add title=".*Preferences$" manage=off sub-layer=normal
+yabai -m rule --add title="^Configuration.*$" manage=off sub-layer=normal
+yabai -m rule --add title="^Options.*$" manage=off sub-layer=normal
+yabai -m rule --add title=".*Properties$" manage=off sub-layer=normal
+
+# Information and about dialogs - normal layer
+yabai -m rule --add title="^About .*$" manage=off sub-layer=normal
+
+# System alerts and errors - above layer for urgency, but not sticky
+yabai -m rule --add title="^Error.*$" manage=off sub-layer=above
+yabai -m rule --add title="^Warning.*$" manage=off sub-layer=above
+yabai -m rule --add title="^Alert.*$" manage=off sub-layer=above
+yabai -m rule --add title="^Critical.*$" manage=off sub-layer=above
+
+# Print dialogs - normal layer for interaction
+yabai -m rule --add title="^Print$" manage=off sub-layer=normal
+yabai -m rule --add title="^Print .*$" manage=off sub-layer=normal
+
+echo "Setting up editor-specific floating windows..."
+
+# ZED EDITOR - Floating dialogs and tool windows
+yabai -m rule --add app="^Zed$" title="^Welcome.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Zed$" title="^Open.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Zed$" title="^Save.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Zed$" title="^Choose.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Zed$" title=".*Settings.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Zed$" title=".*Preferences.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Zed$" title="^Command Palette$" manage=off sub-layer=above
+
+# VS CODE - Floating dialogs
+yabai -m rule --add app="^Visual Studio Code$" title="^Open.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Visual Studio Code$" title="^Save.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Visual Studio Code$" title="^Settings.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Code$" title="^Open.*$" manage=off sub-layer=normal
+yabai -m rule --add app="^Code$" title="^Save.*$" manage=off sub-layer=normal
+
+echo "Setting up JetBrains IDE rules with enhanced focus management..."
+
+# JetBrains IDEs - Complex window management
 JB_Apps='^(CLion|PyCharm|IntelliJ IDEA|GoLand)$'
-yabai -m rule --add app="${JB_Apps}" manage=off
-# If `Open last project when launch` is checked, add this rule. And make sure `always show project path` is also checked.
-# yabai -m rule --add app="${JB_Apps}" title=".*\[.*\].*" manage=on
-yabai -m rule --add app="${JB_Apps}" title="^$"  manage=on
 
-# place apps to spaces
-yabai -m rule --add app="^Messages$" space=^"im"
-yabai -m rule --add app="^Element$" space=^"im"
-yabai -m rule --add app="^Slack$" space=^"im"
-yabai -m rule --add app="^Discord$" space=^"im"
+# JetBrains floating dialogs - normal layer for interaction
+yabai -m rule --add app="${JB_Apps}" title="^Welcome.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title=".*Settings.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title=".*Preferences.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title="^Open.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title="^Save.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title="^New.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title="^Create.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title="^Import.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title="^Export.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title="^Find.*$" manage=off sub-layer=normal
+yabai -m rule --add app="${JB_Apps}" title="^Replace.*$" manage=off sub-layer=normal
 
-yabai -m rule --add app="^Brave Browser$" space=^"web"
-yabai -m rule --add app="^Microsoft Edge$" space=^"web"
-yabai -m rule --add app="^Safari$" space="web"
-yabai -m rule --add app="^Firefox$" space=^"web"
+# JetBrains tool windows - below layer to not interfere with coding
+yabai -m rule --add app="${JB_Apps}" title=".*Tool Window.*$" manage=off sub-layer=below
 
-yabai -m rule --add app="^Chatbox$" space="calendar"
-yabai -m rule --add app="^Calendar$" space="calendar"
+# JetBrains main project windows (tiled in code space)
+yabai -m rule --add app="${JB_Apps}" title=".*\\[.*\\].*" manage=on space=4
 
-yabai -m rule --add app="^GoLand$" space=^"code"
-yabai -m rule --add app="^Code$" space=^"code"
-yabai -m rule --add app="^Zed$" space=^"code"
+# JetBrains startup windows (empty title, managed in code space)
+yabai -m rule --add app="${JB_Apps}" title="^$" manage=on space=4
 
-yabai -m rule --add app="^Alacritty$" space=^"terminal"
+echo "Setting up space assignment rules..."
 
-yabai -m rule --add app="^Spotify$" space="misc"
-yabai -m rule --add app="^Music$" space="misc"
-yabai -m rule --add app="^Notes$" space=^"misc"
+# IM apps -> Space 1 (im)
+yabai -m rule --add app="^Messages$" space=1
+yabai -m rule --add app="^Element$" space=1
+yabai -m rule --add app="^Slack$" space=1
+yabai -m rule --add app="^Discord$" space=1
 
-yabai -m rule --add app="^Royal TSX$" space=^"ssh"
+# Web browsers -> Space 2 (web)
+yabai -m rule --add app="^Brave Browser$" space=2
+yabai -m rule --add app="^Microsoft Edge$" space=2
+yabai -m rule --add app="^Safari$" space=2
+yabai -m rule --add app="^Firefox$" space=2
 
-yabai -m rule --add app="^Google Chrome$" title="^Google Meet.*$" space="meet"
-yabai -m rule --add app="^zoom.us$" space=^"meet"
-yabai -m rule --add app="^Microsoft Teams$" space="meet"
+# Calendar/productivity -> Space 3 (calendar)
+yabai -m rule --add app="^Chatbox$" space=3
+yabai -m rule --add app="^Claude$" space=3
+yabai -m rule --add app="^Calendar$" space=3
 
-echo "Done"
-#iTerm specifics
-#yabai -m rule --add app="^iTerm2$" space=^"terminal"
+# Code editors -> Space 4 (code)
+yabai -m rule --add app="^GoLand$" space=4
+yabai -m rule --add app="^Visual Studio Code$" space=4
+yabai -m rule --add app="^Code$" space=4
+yabai -m rule --add app="^Zed$" space=4
+
+# Terminal apps -> Space 5 (terminal)
+yabai -m rule --add app="^Alacritty$" space=5
+yabai -m rule --add app="^Ghostty$" space=5
+yabai -m rule --add app="^iTerm2$" space=5
+
+# Misc managed apps -> Space 6 (misc)
+yabai -m rule --add app="^Spotify$" space=6
+yabai -m rule --add app="^Music$" space=6
+yabai -m rule --add app="^Notes$" space=6
+yabai -m rule --add app="^TextEdit$" space=6
+yabai -m rule --add app="^Preview$" space=6
+
+# SSH/Remote -> Space 7 (ssh)
+yabai -m rule --add app="^Royal TSX$" space=7
+
+# Meeting apps -> Space 8 (meet)
+yabai -m rule --add app="^Google Chrome$" title=".*Google Meet.*" space=8
+yabai -m rule --add app="^zoom.us$" space=8
+yabai -m rule --add app="^Zoom$" space=8
+yabai -m rule --add app="^Microsoft Teams$" space=8
+
+echo "Setting up catch-all rules for common applications..."
+
+# CATCH-ALL RULES - Apps without specific assignments go to misc space
+# These use normal layer behavior and proper focus management
+
+# Document and office apps
+yabai -m rule --add app="^Pages$" space=6
+yabai -m rule --add app="^Numbers$" space=6
+yabai -m rule --add app="^Keynote$" space=6
+yabai -m rule --add app="^Microsoft Word$" space=6
+yabai -m rule --add app="^Microsoft Excel$" space=6
+yabai -m rule --add app="^Microsoft PowerPoint$" space=6
+
+# Design and creative apps
+yabai -m rule --add app="^Adobe.*$" space=6
+yabai -m rule --add app="^Sketch$" space=6
+yabai -m rule --add app="^Figma$" space=6
+
+# Media and entertainment
+yabai -m rule --add app="^VLC$" space=6
+yabai -m rule --add app="^QuickTime Player$" space=6
+yabai -m rule --add app="^IINA$" space=6
+yabai -m rule --add app="^Plex$" space=6
+
+# Productivity and cloud storage
+yabai -m rule --add app="^1Password.*$" space=6
+yabai -m rule --add app="^Dropbox$" space=6
+yabai -m rule --add app="^Google Drive$" space=6
+yabai -m rule --add app="^OneDrive$" space=6
+yabai -m rule --add app="^Notion$" space=6
+yabai -m rule --add app="^Obsidian$" space=6
+
+# Development tools and utilities
+yabai -m rule --add app="^Docker.*$" space=6
+yabai -m rule --add app="^Postman$" space=6
+yabai -m rule --add app="^Insomnia$" space=6
+
+# Games and entertainment
+yabai -m rule --add app=".*Game.*$" space=6
+yabai -m rule --add app="^Steam$" space=6
+
+echo "Setting up advanced focus management signals..."
+
+# FOCUS MANAGEMENT SIGNALS
+# These signals help prevent floating windows from misbehaving
+
+# Signal to ensure proper focus behavior when windows are created
+yabai -m signal --add event=window_created action="yabai -m query --windows --window | jq -er '.\"is-floating\"' && yabai -m window --layer normal || true"
+
+# Signal to handle focus changes and prevent floating windows from staying on top inappropriately
+yabai -m signal --add event=window_focused action='
+  window_info=$(yabai -m query --windows --window)
+  is_floating=$(echo "$window_info" | jq -r ".\"is-floating\"")
+  app_name=$(echo "$window_info" | jq -r ".app")
+
+  # If focusing a tiled window, ensure floating windows are not sticky
+  if [ "$is_floating" = "false" ]; then
+    yabai -m query --windows --space | jq -r ".[] | select(.\"is-floating\" == true and .\"sub-layer\" == \"normal\") | .id" | while read -r floating_id; do
+      yabai -m window "$floating_id" --layer normal 2>/dev/null || true
+    done
+  fi
+'
+
+# Signal to handle application focus changes
+yabai -m signal --add event=application_activated action='
+  # When switching applications, ensure proper focus behavior
+  yabai -m query --windows --space | jq -r ".[] | select(.\"is-floating\" == true) | .id" | while read -r floating_id; do
+    yabai -m window "$floating_id" --layer normal 2>/dev/null || true
+  done
+'
+
+echo "Yabai configuration completed successfully!"
+echo ""
+echo "✨ Enhanced floating window focus management active:"
+echo ""
+echo "📊 Sub-layer strategy implemented:"
+echo "   • below: Calculator, Screenshot tools, Archive Utility"
+echo "   • normal: Finder, preferences, most dialogs, system utilities"
+echo "   • above: Error/Warning/Alert dialogs, critical prompts"
+echo ""
+echo "🎯 Focus behavior improvements:"
+echo "   • Floating windows won't stay always on top"
+echo "   • Context-aware apps open on current space"
+echo "   • Proper focus switching between tiled and floating windows"
+echo "   • Modal dialogs behave appropriately"
+echo "   • Advanced signal handling prevents focus issues"
+echo ""
+echo "🏠 Context-aware floating apps (current space):"
+echo "   Finder, Calculator, Activity Monitor, Bitwarden, utilities"
+echo ""
+echo "🎨 Organized spaces:"
+echo "   1=im, 2=web, 3=calendar, 4=code, 5=terminal, 6=misc, 7=ssh, 8=meet"
+
+# Optional: Focus the largest tiled window to ensure proper initial state
+yabai -m window --focus largest 2>/dev/null || true

@@ -4,3 +4,4 @@ command = /opt/homebrew/bin/zellij
 macos-option-as-alt = true
 keybind = alt+left=text:\x1BB
 keybind = alt+right=text:\x1BF
+keybind = shift+enter=text:\x1b\r

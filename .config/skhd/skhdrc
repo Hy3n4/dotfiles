@@ -24,5 +24,8 @@ shift + alt - m : /opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen
 shift + alt - e : /opt/homebrew/bin/yabai -m space --balance
 
 # float / unfloat window and center on screen
-alt - t : /opt/homebrew/bin/yabai -m window --toggle float;\
+shift + alt - t : /opt/homebrew/bin/yabai -m window --toggle float;\
           /opt/homebrew/bin/yabai -m window --grid 4:4:1:1:2:2
+
+shift + alt - c : ~/scripts/yabai-center-main.sh
+

@@ -28,6 +28,7 @@ alias tfiu='terraform init --upgrade'
 alias tg='terragrunt'
 alias tgp='terragrunt plan'
 alias tga='terragrunt apply'
+alias tgi='terragrund init'
 alias tgiu='terragrunt init --upgrade'
 alias tgiua='terragrunt init --upgrade && terragrunt apply'
 

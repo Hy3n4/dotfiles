@@ -36,6 +36,7 @@ plugins=(
   docker
   docker-compose
   encode64
+  fzf-zsh-plugin
   gcloud
   git
   github
