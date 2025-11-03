@@ -43,6 +43,7 @@ plugins=(
   history
   history-substring-search
   kubectl
+  kube-ps1
   macos
   pip
   pyenv
@@ -114,9 +115,11 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # GCloud Configuration
 # ===========================
 
-export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+#export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
 # Source GCloud SDK scripts.
+source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 #source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 #source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc"
 
@@ -129,7 +132,7 @@ source "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"
 
 # Update prompt to include kube-ps1.
 PS1='$(kube_ps1)'$PS1
-
+PROMPT='$(kube_ps1)'$PROMPT
 # ===========================
 # The Fuck Command Correction
 # ===========================
@@ -219,3 +222,13 @@ fi
 [[ -e "/Users/patrikchadima/lib/oci_autocomplete.sh" ]] && source "/Users/patrikchadima/lib/oci_autocomplete.sh"
 
 complete -o nospace -C /Users/patrikchadima/.tenv/Terraform/1.10.5/terraform terraform
+
+# Created by `pipx` on 2025-10-23 12:59:33
+export PATH="$PATH:/Users/patrikchadima/.local/bin"
+
+export K9S_CONFIG_DIR="/Users/patrikchadima/.config/k9s"
+PATH="/Users/patrikchadima/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/patrikchadima/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/patrikchadima/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/patrikchadima/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/patrikchadima/perl5"; export PERL_MM_OPT;

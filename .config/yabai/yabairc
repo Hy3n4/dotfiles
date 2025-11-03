@@ -4,7 +4,7 @@
 # Addresses issues with floating windows staying on top and maintaining focus inappropriately
 
 # Debug options (uncomment for troubleshooting)
-# yabai -m config debug_output on
+yabai -m config debug_output on
 
 echo "Starting enhanced yabai configuration with proper floating window focus management..."
 
@@ -199,33 +199,6 @@ yabai -m rule --add app="^Visual Studio Code$" title="^Settings.*$" manage=off s
 yabai -m rule --add app="^Code$" title="^Open.*$" manage=off sub-layer=normal
 yabai -m rule --add app="^Code$" title="^Save.*$" manage=off sub-layer=normal
 
-echo "Setting up JetBrains IDE rules with enhanced focus management..."
-
-# JetBrains IDEs - Complex window management
-JB_Apps='^(CLion|PyCharm|IntelliJ IDEA|GoLand)$'
-
-# JetBrains floating dialogs - normal layer for interaction
-yabai -m rule --add app="${JB_Apps}" title="^Welcome.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title=".*Settings.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title=".*Preferences.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title="^Open.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title="^Save.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title="^New.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title="^Create.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title="^Import.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title="^Export.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title="^Find.*$" manage=off sub-layer=normal
-yabai -m rule --add app="${JB_Apps}" title="^Replace.*$" manage=off sub-layer=normal
-
-# JetBrains tool windows - below layer to not interfere with coding
-yabai -m rule --add app="${JB_Apps}" title=".*Tool Window.*$" manage=off sub-layer=below
-
-# JetBrains main project windows (tiled in code space)
-yabai -m rule --add app="${JB_Apps}" title=".*\\[.*\\].*" manage=on space=4
-
-# JetBrains startup windows (empty title, managed in code space)
-yabai -m rule --add app="${JB_Apps}" title="^$" manage=on space=4
-
 echo "Setting up space assignment rules..."
 
 # IM apps -> Space 1 (im)
@@ -293,16 +266,11 @@ yabai -m rule --add app="^Figma$" space=6
 # Media and entertainment
 yabai -m rule --add app="^VLC$" space=6
 yabai -m rule --add app="^QuickTime Player$" space=6
-yabai -m rule --add app="^IINA$" space=6
-yabai -m rule --add app="^Plex$" space=6
+yabai -m rule --add app="^Infuse$" space=6
 
 # Productivity and cloud storage
-yabai -m rule --add app="^1Password.*$" space=6
 yabai -m rule --add app="^Dropbox$" space=6
 yabai -m rule --add app="^Google Drive$" space=6
-yabai -m rule --add app="^OneDrive$" space=6
-yabai -m rule --add app="^Notion$" space=6
-yabai -m rule --add app="^Obsidian$" space=6
 
 # Development tools and utilities
 yabai -m rule --add app="^Docker.*$" space=6
@@ -319,51 +287,26 @@ echo "Setting up advanced focus management signals..."
 # These signals help prevent floating windows from misbehaving
 
 # Signal to ensure proper focus behavior when windows are created
-yabai -m signal --add event=window_created action="yabai -m query --windows --window | jq -er '.\"is-floating\"' && yabai -m window --layer normal || true"
+# yabai -m signal --add event=window_created action="yabai -m query --windows --window | jq -er '.\"is-floating\"' && yabai -m window --layer normal || true"
 
-# Signal to handle focus changes and prevent floating windows from staying on top inappropriately
-yabai -m signal --add event=window_focused action='
-  window_info=$(yabai -m query --windows --window)
-  is_floating=$(echo "$window_info" | jq -r ".\"is-floating\"")
-  app_name=$(echo "$window_info" | jq -r ".app")
+# # Signal to handle focus changes and prevent floating windows from staying on top inappropriately
+# yabai -m signal --add event=window_focused action='
+#   window_info=$(yabai -m query --windows --window)
+#   is_floating=$(echo "$window_info" | jq -r ".\"is-floating\"")
+#   app_name=$(echo "$window_info" | jq -r ".app")
 
-  # If focusing a tiled window, ensure floating windows are not sticky
-  if [ "$is_floating" = "false" ]; then
-    yabai -m query --windows --space | jq -r ".[] | select(.\"is-floating\" == true and .\"sub-layer\" == \"normal\") | .id" | while read -r floating_id; do
-      yabai -m window "$floating_id" --layer normal 2>/dev/null || true
-    done
-  fi
-'
+#   # If focusing a tiled window, ensure floating windows are not sticky
+#   if [ "$is_floating" = "false" ]; then
+#     yabai -m query --windows --space | jq -r ".[] | select(.\"is-floating\" == true and .\"sub-layer\" == \"normal\") | .id" | while read -r floating_id; do
+#       yabai -m window "$floating_id" --layer normal 2>/dev/null || true
+#     done
+#   fi
+# '
 
-# Signal to handle application focus changes
-yabai -m signal --add event=application_activated action='
-  # When switching applications, ensure proper focus behavior
-  yabai -m query --windows --space | jq -r ".[] | select(.\"is-floating\" == true) | .id" | while read -r floating_id; do
-    yabai -m window "$floating_id" --layer normal 2>/dev/null || true
-  done
-'
-
-echo "Yabai configuration completed successfully!"
-echo ""
-echo "✨ Enhanced floating window focus management active:"
-echo ""
-echo "📊 Sub-layer strategy implemented:"
-echo "   • below: Calculator, Screenshot tools, Archive Utility"
-echo "   • normal: Finder, preferences, most dialogs, system utilities"
-echo "   • above: Error/Warning/Alert dialogs, critical prompts"
-echo ""
-echo "🎯 Focus behavior improvements:"
-echo "   • Floating windows won't stay always on top"
-echo "   • Context-aware apps open on current space"
-echo "   • Proper focus switching between tiled and floating windows"
-echo "   • Modal dialogs behave appropriately"
-echo "   • Advanced signal handling prevents focus issues"
-echo ""
-echo "🏠 Context-aware floating apps (current space):"
-echo "   Finder, Calculator, Activity Monitor, Bitwarden, utilities"
-echo ""
-echo "🎨 Organized spaces:"
-echo "   1=im, 2=web, 3=calendar, 4=code, 5=terminal, 6=misc, 7=ssh, 8=meet"
-
-# Optional: Focus the largest tiled window to ensure proper initial state
-yabai -m window --focus largest 2>/dev/null || true
+# # Signal to handle application focus changes
+# yabai -m signal --add event=application_activated action='
+#   # When switching applications, ensure proper focus behavior
+#   yabai -m query --windows --space | jq -r ".[] | select(.\"is-floating\" == true) | .id" | while read -r floating_id; do
+#     yabai -m window "$floating_id" --layer normal 2>/dev/null || true
+#   done
+# '
