@@ -44,7 +44,7 @@ function setup_space {
   yabai -m space "$idx" --label "$name"
 }
 
-# Define spaces
+# define spaces
 setup_space 1 im
 setup_space 2 web
 setup_space 3 calendar
@@ -53,6 +53,9 @@ setup_space 5 terminal
 setup_space 6 misc
 setup_space 7 ssh
 setup_space 8 meet
+if [ "$num_displays" -eq 1 ]; then
+    setup_space 9 misc2
+fi
 
 echo "Configuring layouts and enhanced focus behavior..."
 
@@ -61,6 +64,9 @@ yabai -m config layout bsp
 
 # Set space 6 (misc) to float layout
 yabai -m config --space 6 layout float
+if [ "$num_displays" -gt 1 ]; then
+    yabai -m config --space 9 layout float
+fi
 
 # Window management settings
 yabai -m config window_placement second_child
@@ -136,7 +142,6 @@ yabai -m rule --add app="^Bitwarden$" manage=off sub-layer=normal
 
 # Screenshot and capture tools - below layer to not obstruct
 yabai -m rule --add app="^Screenshot$" manage=off sub-layer=below
-yabai -m rule --add app="^CleanShot X$" manage=off sub-layer=below
 
 # Font and design tools - normal layer for design work
 yabai -m rule --add app="^Font Book$" manage=off sub-layer=normal
@@ -282,31 +287,3 @@ yabai -m rule --add app=".*Game.*$" space=6
 yabai -m rule --add app="^Steam$" space=6
 
 echo "Setting up advanced focus management signals..."
-
-# FOCUS MANAGEMENT SIGNALS
-# These signals help prevent floating windows from misbehaving
-
-# Signal to ensure proper focus behavior when windows are created
-# yabai -m signal --add event=window_created action="yabai -m query --windows --window | jq -er '.\"is-floating\"' && yabai -m window --layer normal || true"
-
-# # Signal to handle focus changes and prevent floating windows from staying on top inappropriately
-# yabai -m signal --add event=window_focused action='
-#   window_info=$(yabai -m query --windows --window)
-#   is_floating=$(echo "$window_info" | jq -r ".\"is-floating\"")
-#   app_name=$(echo "$window_info" | jq -r ".app")
-
-#   # If focusing a tiled window, ensure floating windows are not sticky
-#   if [ "$is_floating" = "false" ]; then
-#     yabai -m query --windows --space | jq -r ".[] | select(.\"is-floating\" == true and .\"sub-layer\" == \"normal\") | .id" | while read -r floating_id; do
-#       yabai -m window "$floating_id" --layer normal 2>/dev/null || true
-#     done
-#   fi
-# '
-
-# # Signal to handle application focus changes
-# yabai -m signal --add event=application_activated action='
-#   # When switching applications, ensure proper focus behavior
-#   yabai -m query --windows --space | jq -r ".[] | select(.\"is-floating\" == true) | .id" | while read -r floating_id; do
-#     yabai -m window "$floating_id" --layer normal 2>/dev/null || true
-#   done
-# '
